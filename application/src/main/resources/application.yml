@@ -1,0 +1,13 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  main:
+    web-environment: ${WEB_ENVIRONMENT}
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
+logging:
+  level:
+    ROOT: info
+    akka.cluster: info
+    com.sqshq: info

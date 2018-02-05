@@ -1,0 +1,54 @@
+version: '2'
+services:
+
+  etcd:
+    image: quay.io/coreos/etcd
+    ports:
+      - 2379:2379
+    environment:
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+      ETCD_ADVERTISE_CLIENT_URLS: http://localhost:2379
+
+  consumer1:
+    build: application
+    depends_on:
+      - etcd
+    ports:
+      - 8180:8080
+    environment:
+      SPRING_PROFILES_ACTIVE: consumer
+      WEB_ENVIRONMENT: 'true'
+
+  worker1:
+    build: application
+    depends_on:
+      - etcd
+    environment:
+      SPRING_PROFILES_ACTIVE: worker
+      WEB_ENVIRONMENT: 'false'
+
+  worker2:
+    build: application
+    depends_on:
+      - etcd
+    environment:
+      SPRING_PROFILES_ACTIVE: worker
+      WEB_ENVIRONMENT: 'false'
+
+  worker3:
+    build: application
+    depends_on:
+      - etcd
+    environment:
+      SPRING_PROFILES_ACTIVE: worker
+      WEB_ENVIRONMENT: 'false'
+
+  publisher1:
+    build: application
+    depends_on:
+      - etcd
+    environment:
+      SPRING_PROFILES_ACTIVE: publisher
+      WEB_ENVIRONMENT: 'true'
+    ports:
+      - 8280:8080
